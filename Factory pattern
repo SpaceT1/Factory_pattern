@@ -1,0 +1,176 @@
+interface Creature {
+    void attack();
+    int getHP();
+}
+
+interface Weapon {
+    String getWeaponName();
+}
+
+class Hammer implements Weapon {
+    @Override
+    public String getWeaponName() {
+        return "hammer";
+    }
+}
+
+class Sword implements Weapon {
+    @Override
+    public String getWeaponName() {
+        return "sword";
+    }
+}
+
+class BowAndArrow implements Weapon {
+    @Override
+    public String getWeaponName() {
+        return "bow and arrow";
+    }
+}
+
+class MagicSpells implements Weapon {
+    @Override
+    public String getWeaponName() {
+        return "magic spells";
+    }
+}
+class Goblin implements Creature {
+    private int hp;
+    private Weapon weapon;
+
+    public Goblin(int hp, Weapon weapon) {
+        this.hp = hp;
+        this.weapon = weapon;
+    }
+
+    @Override
+    public void attack() {
+        System.out.println("Goblin attacks with a " + weapon.getWeaponName() + "!");
+    }
+
+    @Override
+    public int getHP() {
+        return hp;
+    }
+}
+
+class Skeleton implements Creature {
+    private int hp;
+    private Weapon weapon;
+
+    public Skeleton(int hp, Weapon weapon) {
+        this.hp = hp;
+        this.weapon = weapon;
+    }
+
+    @Override
+    public void attack() {
+        System.out.println("Skeleton attacks with a " + weapon.getWeaponName() + "!");
+    }
+
+    @Override
+    public int getHP() {
+        return hp;
+    }
+}
+
+// Step 5: Create concrete implementations of the Creature interface for the forest
+class Elf implements Creature {
+    private int hp;
+    private Weapon weapon;
+
+    public Elf(int hp, Weapon weapon) {
+        this.hp = hp;
+        this.weapon = weapon;
+    }
+
+    @Override
+    public void attack() {
+        System.out.println("Elf attacks with a " + weapon.getWeaponName() + "!");
+    }
+
+    @Override
+    public int getHP() {
+        return hp;
+    }
+}
+
+class Fairy implements Creature {
+    private int hp;
+    private Weapon weapon;
+
+    public Fairy(int hp, Weapon weapon) {
+        this.hp = hp;
+        this.weapon = weapon;
+    }
+
+    @Override
+    public void attack() {
+        System.out.println("Fairy attacks with " + weapon.getWeaponName() + "!");
+    }
+
+    @Override
+    public int getHP() {
+        return hp;
+    }
+}
+
+abstract class CreatureFactory {
+    public abstract Creature createCreature();
+
+    public void introduceCreature() {
+        Creature creature = createCreature();
+        System.out.println("A new creature has been spawned:");
+        creature.attack();
+        System.out.println("HP: " + creature.getHP());
+    }
+}
+
+class DungeonCreatureFactory extends CreatureFactory {
+    @Override
+    public Creature createCreature() {
+        int randomHP = (int) (Math.random() * 100) + 1;  
+        int randomWeapon = (int) (Math.random() * 2);
+        Weapon weapon;
+        if (randomWeapon == 0) {
+            weapon = new Hammer();
+        } else {
+            weapon = new Sword();
+        }
+        int random = (int) (Math.random() * 2);
+        if (random == 0) {
+            return new Goblin(randomHP, weapon);
+        } else {
+            return new Skeleton(randomHP, weapon);
+        }
+    }
+}
+
+class ForestCreatureFactory extends CreatureFactory {
+    @Override
+    public Creature createCreature() {
+        int randomHP = (int) (Math.random() * 100) + 1;
+        int randomWeapon = (int) (Math.random() * 2);
+        Weapon weapon;
+        if (randomWeapon == 0) {
+            weapon = new BowAndArrow();
+        } else {
+            weapon = new MagicSpells();
+        }
+        int random = (int) (Math.random() * 2);
+        if (random == 0) {
+            return new Fairy(randomHP, weapon);
+        } else {
+            return new Elf(randomHP, weapon);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        CreatureFactory dungeonFactory = new DungeonCreatureFactory();
+        dungeonFactory.introduceCreature();
+
+        CreatureFactory forestFactory = new ForestCreatureFactory();
+        forestFactory.introduceCreature();
+    }
